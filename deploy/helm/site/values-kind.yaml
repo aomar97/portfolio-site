@@ -1,0 +1,10 @@
+# Local kind: registry-less local image, ingress-nginx.
+replicaCount: 1
+
+image:
+  registry: "" # use a locally-built/loaded image (portfolio-site:<tag>)
+  tag: dev
+
+ingress:
+  className: nginx
+  host: portfolio.localtest.me

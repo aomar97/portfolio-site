@@ -45,19 +45,14 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Trivy gate (fixable HIGH/CRITICAL)
-        uses: aquasecurity/trivy-action@v0.30.0
-        with:
-          image-ref: ${{ steps.img.outputs.ref }}
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: "1"
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.71.2
+          trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 "${{ steps.img.outputs.ref }}"
 
       - name: SBOM (syft)
-        uses: anchore/sbom-action@v0.17.8
-        with:
-          image: ${{ steps.img.outputs.ref }}
-          format: spdx-json
-          output-file: sbom.spdx.json
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin
+          syft "${{ steps.img.outputs.ref }}" -o spdx-json > sbom.spdx.json
       - uses: actions/upload-artifact@v4
         with:
           name: sbom
