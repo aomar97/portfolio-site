@@ -1,6 +1,6 @@
 # mkdocs / python
 .venv/
-site/
+/site/
 __pycache__/
 
 # terraform

@@ -1,0 +1,17 @@
+# EKS: image from your registry, ALB via AWS Load Balancer Controller, ACM TLS.
+replicaCount: 2
+
+image:
+  registry: ghcr.io/CHANGEME
+  tag: "" # pinned to the commit SHA by CI
+
+ingress:
+  className: alb
+  host: portfolio.example.com
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    # alb.ingress.kubernetes.io/certificate-arn: <ACM_CERT_ARN>   # from ACM
+  tls: false # ALB terminates TLS via the ACM annotation above

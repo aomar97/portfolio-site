@@ -1,0 +1,6 @@
+apiVersion: v2
+name: portfolio-site
+description: Static DevOps portfolio site (MkDocs) served from distroless/static.
+type: application
+version: 0.1.0
+appVersion: "dev"

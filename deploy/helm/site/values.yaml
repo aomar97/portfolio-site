@@ -1,0 +1,23 @@
+replicaCount: 2
+
+image:
+  registry: ghcr.io/CHANGEME
+  repository: portfolio-site
+  tag: "" # defaults to Chart.appVersion
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 24Mi
+  limits:
+    cpu: 100m
+    memory: 64Mi
+
+ingress:
+  enabled: true
+  className: nginx
+  host: portfolio.localtest.me
+  annotations: {}
+  tls: false
+  tlsSecretName: ""

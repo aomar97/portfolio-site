@@ -45,19 +45,14 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Trivy gate (fixable HIGH/CRITICAL)
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          image-ref: ${{ steps.img.outputs.ref }}
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: "1"
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sudo sh -s -- -b /usr/local/bin v0.71.2
+          trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 "${{ steps.img.outputs.ref }}"
 
       - name: SBOM (syft)
-        uses: anchore/sbom-action@v0.17.8
-        with:
-          image: ${{ steps.img.outputs.ref }}
-          format: spdx-json
-          output-file: sbom.spdx.json
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin
+          syft "${{ steps.img.outputs.ref }}" -o spdx-json > sbom.spdx.json
       - uses: actions/upload-artifact@v4
         with:
           name: sbom
@@ -89,19 +84,6 @@ jobs:
           helm template site deploy/helm/site -f deploy/helm/site/values-kind.yaml >/dev/null
           helm template site deploy/helm/site -f deploy/helm/site/values-eks.yaml >/dev/null
 
-  bump-gitops:
-    name: GitOps image bump
-    needs: [image, helm]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-      - run: |
-          sed -i "s|^  tag:.*|  tag: \"${GITHUB_SHA}\"|" deploy/helm/site/values-eks.yaml
-      - run: |
-          git config user.name "ci-bot"
-          git config user.email "ci-bot@users.noreply.github.com"
-          git commit -am "ci: deploy site @ ${GITHUB_SHA} [skip ci]" || echo "no changes"
-          git push
+  # Image promotion is handled by ArgoCD auto-sync against the pushed image
+  # (see deploy/argocd/). CI never pushes to a protected main branch; a tag bump,
+  # if desired, is done via a PR — keeping branch protection intact.

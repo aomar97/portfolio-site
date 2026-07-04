@@ -8,7 +8,7 @@ This site is itself an exhibit: it's containerized, Helm-packaged, delivered by 
 
 <div class="metrics" markdown>
 <div class="metric"><div class="n">27 MB</div><div class="l">smallest distroless image</div></div>
-<div class="metric"><div class="n">0</div><div class="l">HIGH/CRITICAL CVEs (Trivy-gated)</div></div>
+<div class="metric"><div class="n">0</div><div class="l">HIGH/CRITICAL dependency CVEs (Trivy-gated)</div></div>
 <div class="metric"><div class="n">$0</div><div class="l">to run the demos</div></div>
 <div class="metric"><div class="n">3</div><div class="l">CI systems, one pipeline</div></div>
 <div class="metric"><div class="n">GitOps</div><div class="l">ArgoCD app-of-apps</div></div>
