@@ -1,0 +1,30 @@
+# EKS-as-code: deploys the site onto the eks-platform (Repo 1) cluster via ALB + ACM.
+# Validated with `helm template`; applied only when a cluster is running.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portfolio-site
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/aomar97/portfolio-site.git
+    targetRevision: main
+    path: deploy/helm/site
+    helm:
+      valueFiles:
+        - values-eks.yaml
+      parameters:
+        - name: image.registry
+          value: ghcr.io/aomar97
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: portfolio
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

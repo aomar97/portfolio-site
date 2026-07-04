@@ -1,0 +1,9 @@
+.git
+site/
+*.md
+!docs/**
+deploy/
+terraform/
+.github/
+Dockerfile
+.dockerignore

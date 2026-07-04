@@ -1,0 +1,21 @@
+# mkdocs / python
+.venv/
+site/
+__pycache__/
+
+# terraform
+terraform/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+
+# kube (isolated demo kubeconfig)
+.kube-demo
+
+# supply-chain artifacts
+sbom*.json
+
+# os/editor
+.DS_Store
+.idea/
+.vscode/

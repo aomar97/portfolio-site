@@ -1,0 +1,27 @@
+# Deploys the site onto a local kind cluster (ingress-nginx). Set repoURL after push,
+# or apply the chart directly with `make dev`.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portfolio-site
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/aomar97/portfolio-site.git
+    targetRevision: main
+    path: deploy/helm/site
+    helm:
+      valueFiles:
+        - values-kind.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: portfolio
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
