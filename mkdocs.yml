@@ -1,6 +1,10 @@
 site_name: Ahmed Omar — DevOps Portfolio
 site_description: Platform engineering portfolio — EKS + Terraform, GitOps, CI/CD, supply-chain security, observability.
 site_author: Ahmed Omar
+site_url: https://aomar97.github.io/portfolio-site/
+
+repo_url: https://github.com/aomar97/portfolio-site
+repo_name: aomar97/portfolio-site
 
 theme:
   name: material
